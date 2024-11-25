@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>과일 마트</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>과일 마트</h1>
+        <nav>
+            <ul>
+                <li><a href="#">홈</a></li>
+                <li><a href="#">상품 목록</a></li>
+                <li><a href="#">연락처</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="products">
+            <h2>과일 목록</h2>
+            <div id="product-list">불러오는 중...</div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 과일 마트. 모든 권리 보유.</p>
+    </footer>
+
+    <script>
+        // 백엔드에서 과일 데이터를 가져오는 함수
+        async function fetchFruits() {
+            try {
+                const response = await fetch('http://localhost:3000/api/fruits');
+                const fruits = await response.json();
+                const productList = document.getElementById('product-list');
+
+                productList.innerHTML = '';
+
+                fruits.forEach(fruit => {
+                    const productDiv = document.createElement('div');
+                    productDiv.className = 'product';
+
+                    const fruitImage = document.createElement('img');
+                    fruitImage.src = fruit.image; // 이미지 경로
+                    fruitImage.alt = fruit.name;
+
+                    const fruitName = document.createElement('h3');
+                    fruitName.textContent = fruit.name;
+
+                    const fruitPrice = document.createElement('p');
+                    fruitPrice.textContent = `가격: ${fruit.price}원`;
+
+                    productDiv.appendChild(fruitImage);
+                    productDiv.appendChild(fruitName);
+                    productDiv.appendChild(fruitPrice);
+                    productList.appendChild(productDiv);
+                });
+            } catch (error) {
+                console.error('과일 데이터를 불러오는 중 오류 발생:', error);
+            }
+        }
+
+        // 페이지 로드 시 과일 데이터 가져오기
+        window.onload = fetchFruits;
+    </script>
+</body>
+</html>
